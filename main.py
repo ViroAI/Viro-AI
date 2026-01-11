@@ -1,35 +1,59 @@
 import streamlit as st
 import google.generativeai as genai
+import time
 
 st.set_page_config(page_title="Viro AI", page_icon="🚀")
 st.title("Viro AI 🚀")
 
-# API Setup
+# 1. API Key Setup
 if "GEMINI_API_KEY" in st.secrets:
-    try:
-        genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        # Tera bataya hua naya experimental model
-        model = genai.GenerativeModel('gemini-2.0-flash-exp')
-        st.sidebar.success("Engine: 2.0 Experimental Active ✅")
-    except Exception as e:
-        st.sidebar.error(f"Setup Error: {e}")
+    genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 else:
     st.error("API Key Missing!")
     st.stop()
 
-video_file = st.file_uploader("Upload Video", type=['mp4', 'mov'])
+# 2. Caching Function (Ye hai asli bachat!)
+# Ye function yaad rakhega ki is video ka jawab pehle diya tha ya nahi
+@st.cache_resource
+def analyze_video(video_file, prompt_text):
+    # Model: Experimental wala jo fast hai
+    model = genai.GenerativeModel('gemini-2.0-flash-exp') 
+    
+    # Uploading to Gemini
+    with st.spinner("Uploading video to AI brain... (Free account, thoda time lagega)"):
+        # Temporary file save karni padti hai upload ke liye
+        with open("temp_video.mp4", "wb") as f:
+            f.write(video_file.getbuffer())
+        
+        myfile = genai.upload_file("temp_video.mp4")
+        
+        # Wait for processing
+        while myfile.state.name == "PROCESSING":
+            time.sleep(2)
+            myfile = genai.get_file(myfile.name)
+            
+    # Generating Content
+    with st.spinner("Analyzing viral potential..."):
+        result = model.generate_content([myfile, prompt_text])
+    return result.text
 
-if video_file:
-    st.video(video_file)
+# 3. User Interface
+video_input = st.file_uploader("Upload Video", type=['mp4', 'mov'])
+
+if video_input:
+    st.video(video_input)
+    
+    # Button
     if st.button("RUN VIRAL AUDIT"):
-        with st.spinner("AI 2.0 is analyzing..."):
-            try:
-                # Naye model ke liye simple request
-                response = model.generate_content("Give 3 viral tips for this video idea.")
-                st.subheader("Viro Audit Report (2.0)")
-                st.write(response.text)
-                st.balloons()
-            except Exception as e:
-                st.error(f"Model Error: {e}")
-                st.info("Bhai agar ab bhi 404 aaye, toh wahi 'Model Finder' wala code daal ke asli list check karni padegi.")
-                
+        try:
+            # Ye function call cache use karega
+            report = analyze_video(video_input, "Give 3 viral tips for this video. Be specific.")
+            
+            st.subheader("Viro Audit Result")
+            st.markdown(report)
+            st.balloons()
+            
+        except Exception as e:
+            st.error("Quota Over! 10 min ruko ya nayi API Key banao.")
+            st.error(f"Error Details: {e}")
+            
