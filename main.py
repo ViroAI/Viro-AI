@@ -8,9 +8,9 @@ st.title("Viro AI 🚀")
 if "GEMINI_API_KEY" in st.secrets:
     try:
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        # Is baar hum model ka wahi exact naam use kar rahe hain jo list ne dikhaya
-        model = genai.GenerativeModel('models/gemini-1.5-flash')
-        st.sidebar.success("Engine: Verified ✅")
+        # Tera bataya hua naya experimental model
+        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        st.sidebar.success("Engine: 2.0 Experimental Active ✅")
     except Exception as e:
         st.sidebar.error(f"Setup Error: {e}")
 else:
@@ -22,16 +22,14 @@ video_file = st.file_uploader("Upload Video", type=['mp4', 'mov'])
 if video_file:
     st.video(video_file)
     if st.button("RUN VIRAL AUDIT"):
-        with st.status("AI is auditing...", expanded=True) as status:
+        with st.spinner("AI 2.0 is analyzing..."):
             try:
-                # Direct test for report
-                response = model.generate_content("Give 3 viral tips for this gaming video idea.")
-                st.subheader("Viro Audit Report")
-                st.markdown(response.text)
+                # Naye model ke liye simple request
+                response = model.generate_content("Give 3 viral tips for this video idea.")
+                st.subheader("Viro Audit Report (2.0)")
+                st.write(response.text)
                 st.balloons()
-                status.update(label="Audit Complete!", state="complete")
             except Exception as e:
-                # Debugging error detail
-                st.error(f"AI Service Issue: {e}")
-                st.info("Bhai, list mein se koi aur naam try karein?")
+                st.error(f"Model Error: {e}")
+                st.info("Bhai agar ab bhi 404 aaye, toh wahi 'Model Finder' wala code daal ke asli list check karni padegi.")
                 
