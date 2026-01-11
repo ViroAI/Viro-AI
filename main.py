@@ -16,7 +16,7 @@ else:
 @st.cache_resource
 def analyze_video(video_file, prompt_text):
     # SPECIFIC VERSION jo teri list mein tha
-    model = genai.GenerativeModel('gemini-1.5-flash-001') 
+    model = genai.GenerativeModel('gemini-2.0-flash-001') 
     
     with st.spinner("AI video dekh raha hai..."):
         # Uploading
