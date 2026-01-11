@@ -9,7 +9,7 @@ st.markdown("### Viral-Audit Engine: Level 2")
 
 # API Key Connection - Direct check from secrets
 if "GEMINI_API_KEY" in st.secrets:
-    api_key = st.secrets["AIzaSyDeSWaFrB8wc0Bp2sKKKQmEsvqKvun7ZHM"]
+    api_key = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-1.5-flash')
     st.sidebar.success("AI Brain Connected!")
