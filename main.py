@@ -7,14 +7,26 @@ st.set_page_config(page_title="Viro AI", page_icon="🚀")
 st.title("Viro AI 🚀")
 st.markdown("### Viral-Audit Engine: Level 2")
 
-# API Key Connection - Direct check from secrets
+# API Key Connection
 if "GEMINI_API_KEY" in st.secrets:
     api_key = st.secrets["GEMINI_API_KEY"]
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel('gemini-pro')
-    st.sidebar.success("AI Brain Connected!")
+    
+    # Ye block sahi model apne aap chun lega
+    try:
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        # Check if model works
+        model.generate_content("Hi", generation_config={"max_output_tokens": 1})
+        st.sidebar.success("AI Brain: Flash Active ✅")
+    except:
+        try:
+            model = genai.GenerativeModel('gemini-pro')
+            st.sidebar.success("AI Brain: Pro Active ✅")
+        except:
+            st.error("Google API is busy. Please try again in 1 minute.")
+            st.stop()
 else:
-    st.error("Secrets mein API Key nahi mili! Settings check karein.")
+    st.error("Secrets mein API Key nahi mili!")
     st.stop()
 
 # File Upload
@@ -30,13 +42,14 @@ if video_file:
             st.write("📊 Checking viral trends...")
             
             try:
-                # Prompt for AI
-                response = model.generate_content("Analyze this video idea. Give 3 viral tips and a score out of 10.")
+                # Asli Audit Report
+                prompt = "Analyze this video idea. Give 3 short viral tips and a score out of 10."
+                response = model.generate_content(prompt)
                 
                 status.update(label="Audit Complete!", state="complete", expanded=False)
                 st.subheader("Viro Audit Report")
                 st.write(response.text)
                 st.balloons()
             except Exception as e:
-                st.error(f"AI Error: {e}")
+                st.error(f"AI Service Error: Please refresh and try again.")
                 
