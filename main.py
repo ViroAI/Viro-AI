@@ -17,7 +17,7 @@ else:
 @st.cache_resource
 def analyze_video(video_file, prompt_text):
     # Model: Experimental wala jo fast hai
-    model = genai.GenerativeModel('gemini-2.0-flash-exp') 
+    model = genai.GenerativeModel('gemini-1.5-flash')
     
     # Uploading to Gemini
     with st.spinner("Uploading video to AI brain... (Free account, thoda time lagega)"):
