@@ -24,5 +24,5 @@ if file:
     st.video(file)
     if st.button("AUDIT VIDEO"):
         st.balloons()
-        st.success("Bhai Level 1 Clear! Kal isme Video Analysis jodeinge.")
+        st.success("AI is analyzing your video... Please wait.")
       
