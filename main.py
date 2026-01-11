@@ -8,9 +8,9 @@ st.title("Viro AI 🚀")
 if "GEMINI_API_KEY" in st.secrets:
     try:
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
-        # Naya tareeka: Direct model name bina 'models/' prefix ke
+        # Naye update ke liye direct model name
         model = genai.GenerativeModel('gemini-1.5-flash')
-        st.sidebar.success("System: Connected ✅")
+        st.sidebar.success("Engine: Ready ✅")
     except Exception as e:
         st.sidebar.error(f"Setup Error: {e}")
 else:
@@ -24,13 +24,13 @@ if video_file:
     if st.button("RUN VIRAL AUDIT"):
         with st.spinner("AI is analyzing your video..."):
             try:
-                # Chota aur simple prompt
-                response = model.generate_content("Give 3 viral tips for this video.")
+                # Direct simple prompt
+                response = model.generate_content("Give 3 viral tips for this video idea.")
                 if response:
                     st.subheader("Viro Audit Report")
                     st.write(response.text)
                     st.balloons()
             except Exception as e:
-                # Agar ab bhi error aaye toh ye line hume asli wajah batayegi
+                # Agar error aaye toh hume exact technical detail dikhegi
                 st.error(f"AI Service Error: {e}")
                 
